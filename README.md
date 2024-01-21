@@ -15,7 +15,7 @@ View the full README directly on GitHub: [To The README](link-to-your-readme-fil
 - Efficient Transaction Processing with Ethereum Smart Contracts
 - Future Prospects for Enhanced Features, Community Engagement, and Integration with Emerging Web3 Technologies
 
-## Team: Solo
+## Team: Solo Hacker
 
 Explore this README to learn more about Fractionalize's features, technology stack, and the potential impact on property ownership within the Web3 ecosystem.
 
