@@ -4,7 +4,7 @@ This repository contains the README for Fractionalize, a project that enables us
 
 **Access the README:**
 
-View the full README directly on GitHub: [To The README](link-to-your-readme-file)
+View the full README directly on GitHub: [To The README](https://github.com/adamsdavee/Asset-Bloc/blob/main/Project-Proposal-Template.md)
 
 ## Key Highlights:
 
