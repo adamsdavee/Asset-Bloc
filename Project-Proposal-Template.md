@@ -48,7 +48,7 @@ AssetFraction is a decentralized asset trading platform that introduces fraction
 
 ### Work Flow Diagram
 
-[View Work Flow Diagram on Miru](https://miro.com/app/board/uXjVN3Oco8o=/?share_link_id=700296085921)
+[View Work Flow Diagram on Miru](https://miro.com/app/board/uXjVN27vjfg=/)
 
 ### Application Workflow Storyboard
 

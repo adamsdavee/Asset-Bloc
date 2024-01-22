@@ -6,7 +6,7 @@ This repository contains the Road to Web3 Proposal for AssetFraction, a groundbr
 
 **Access the Proposal:**
 
-View the full proposal directly on GitHub: [AssetFraction Proposal](https://github.com/adamsdavee/Asset-Bloc)
+View the full proposal directly on GitHub: [AssetFraction Proposal](https://github.com/adamsdavee/Asset-Bloc/blob/main/Project-Proposal-Template.md)
 
 ## Key Highlights:
 
