@@ -1,6 +1,6 @@
 **Road to Web3 - AssetFraction Proposal**
 
-# AssetFraction: Fractionalized Asset Trading on the Blockchain
+# AssetFraction: Fractionalized Asset Trade Event on the Blockchain
 
 This repository contains the Road to Web3 Proposal for AssetFraction, a groundbreaking project that revolutionizes the way assets are bought and sold by introducing fractionalized ownership through blockchain technology.
 

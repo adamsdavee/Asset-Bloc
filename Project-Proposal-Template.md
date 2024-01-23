@@ -1,14 +1,14 @@
-# AssetFraction: Fractionalized Asset Trading on the Blockchain
+# AssetFraction: Fractionalized Asset TradE Event on the Blockchain
 
 ## Project Abstract
 
-AssetFraction is a revolutionary Dapp that leverages blockchain technology to transform the traditional asset trading landscape. This decentralized platform allows users to sell their assets in fractions, opening up new possibilities for investment and ownership. With a focus on transparency, security, and accessibility, AssetFraction aims to redefine how individuals engage with and benefit from asset ownership.
+AssetFraction is a revolutionary Dapp that leverages blockchain technology to transform the traditional asset trading landscape. This decentralized platform allows users to sell their assets in fractions in events they created, opening up new possibilities for investment and ownership. With a focus on transparency, security, and accessibility, AssetFraction aims to redefine how individuals engage with and benefit from asset ownership.
 
 ## Project Breakdown
 
 ### Project Overview
 
-AssetFraction is a decentralized asset trading platform that introduces fractionalized ownership through blockchain technology. The platform enables individuals to create events to sell their assets, with the process facilitated on the blockchain for enhanced security and transparency. The key objectives include:
+AssetFraction is a decentralized asset trading event platform that introduces fractionalized ownership through blockchain technology. The platform enables individuals to create events to sell their assets, with the process facilitated on the blockchain for enhanced security and transparency. The key objectives include:
 
 1. **Decentralized Asset Trading:** Provide a secure and transparent platform for individuals to sell their assets in fractions.
 
