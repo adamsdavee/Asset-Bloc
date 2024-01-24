@@ -72,7 +72,7 @@ contract EventCreation is AccessControl {
         totalNumberEvents += 1;
     }
 
-    // function()
+    function editEvent() external {}
 
     function validateEventDoc(
         string calldata _docLink,
