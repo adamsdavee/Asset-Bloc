@@ -11,7 +11,7 @@ error EventCreation__NotAdmin();
 contract EventCreation is AccessControl {
     uint256 private totalNumberEvents;
     address public immutable i_owner;
-    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant APPROVAL_ROLE = keccak256("MINTER_ROLE");
 
     enum Status {
         Pending,
@@ -78,7 +78,7 @@ contract EventCreation is AccessControl {
         string calldata _docLink,
         uint256 eventId,
         Status _status
-    ) external onlyRole(MINTER_ROLE) {
+    ) external onlyRole(APPROVAL_ROLE) {
         Event memory theEvent = eachEvent[eventId];
         theEvent.status = _status;
 
@@ -88,6 +88,8 @@ contract EventCreation is AccessControl {
     function grantRole(bytes32, address account) public override onlyAdmin {
         _grantRole(MINTER_ROLE, account);
     }
+
+    function
 }
 
 // 1. Create event
