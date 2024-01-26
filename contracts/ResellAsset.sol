@@ -190,6 +190,16 @@ contract NftMarketplace is ReentrancyGuard {
     function getProceeds(address seller) external view returns (uint256) {
         return s_proceeds[seller];
     }
+
+    function isNftApproved(
+        address nftAddress,
+        uint256 tokenId
+    ) external view returns (bool) {
+        IERC721 nft = IERC721(nftAddress);
+        bool nftApproval = false;
+        if (nft.getApproved(tokenId) == msg.sender) nftApproval = true;
+        return nftApproval;
+    }
 }
 
 // 1. `listItem`: List NFTs on the marketplace

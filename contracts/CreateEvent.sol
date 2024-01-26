@@ -11,7 +11,7 @@ error EventCreation__NotAdmin();
 contract EventCreation is AccessControl {
     uint256 private totalNumberEvents;
     address public immutable i_owner;
-    bytes32 public constant APPROVAL_ROLE = keccak256("MINTER_ROLE");
+    bytes32 public constant APPROVAL_ROLE = keccak256("APPROVAL_ROLE");
 
     enum Status {
         Pending,
@@ -30,6 +30,7 @@ contract EventCreation is AccessControl {
         uint256 endAt;
         uint256 assetPrice;
         Status status;
+        // uint256 assetFractionAvailable;
     }
 
     mapping(address => mapping(uint256 => User)) private userToEventId;
@@ -47,13 +48,13 @@ contract EventCreation is AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, i_owner);
     }
 
-    function CreateEvent(
+    function CreateSaleEvent(
         uint256 _startAt,
         uint256 _endAt,
         string calldata _assetType,
-        uint256 _assetPrice
+        uint256 _assetPrice // Doclink
     ) external {
-        Event memory theEvent = Event(
+        Event memory saleEvent = Event(
             _assetType,
             _startAt,
             _endAt,
@@ -61,13 +62,13 @@ contract EventCreation is AccessControl {
             Status.Pending
         );
         if (
-            theEvent.status == Status.Pending ||
-            theEvent.status == Status.Not_Approved
-        ) revert EventCreation__NotApproved();
+            saleEvent.status == Status.Pending ||
+            saleEvent.status == Status.Not_Approved
+        ) revert EventCreation__NotApproved(); // Remove this
         if (block.timestamp < _startAt) revert EventCreation__NotTime();
         userToEventId[msg.sender][totalNumberEvents] = User(msg.sender, 0);
-        eachEvent[totalNumberEvents] = theEvent;
-        allEvents.push(theEvent);
+        eachEvent[totalNumberEvents] = saleEvent;
+        allEvents.push(saleEvent);
 
         totalNumberEvents += 1;
     }
@@ -86,10 +87,12 @@ contract EventCreation is AccessControl {
     }
 
     function grantRole(bytes32, address account) public override onlyAdmin {
-        _grantRole(MINTER_ROLE, account);
+        _grantRole(APPROVAL_ROLE, account);
     }
 
-    function
+    // function BuyAssetFraction(uint256 eventId) external payable {
+    //     if(msg.value)
+    // }
 }
 
 // 1. Create event
