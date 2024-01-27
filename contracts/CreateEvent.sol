@@ -3,7 +3,7 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "./IERC72.sol";
+import "./IFractionalNft.sol";
 
 error EventCreation__NotTime();
 error EventCreation__NotApproved();
@@ -27,10 +27,11 @@ contract EventCreation is AccessControl {
         Approved
     }
 
-    // struct User {
-    //     address seller;
-    //     uint256 totalEarned;
-    // }
+    struct User {
+        address seller;
+        mapping(address => uint256) earnedPerAsset;
+        uint256 totalEarned;
+    }
 
     struct Event {
         string assetType;
@@ -46,7 +47,7 @@ contract EventCreation is AccessControl {
     mapping(address => mapping(uint256 => User)) private userToEventId;
     mapping(uint256 => Event) private eachEvent;
     mapping(address => mapping(address => Event)) private s_listing;
-    mapping(address => mapping(address => uint256)) private s_proceeds;
+    mapping(address => User) private s_proceeds;
 
     Event[] private allEvents;
 
@@ -130,9 +131,10 @@ contract EventCreation is AccessControl {
         if (msg.value < 0) revert EventCreation__MustBeGreaterThanZero();
 
         saleEvent.assetFractionAvailable -= price;
-        s_proceeds[msg.sender][nftAddress] += price;
+        s_proceeds[saleEvent.seller].earnedPerAsset[nftAddress] += price;
+        s_proceeds[saleEvent.seller].totalEarned += price;
 
-        IERC72 nft = IERC72(nftAddress);
+        IFractionalNft nft = IFractionalNft(nftAddress);
         nft.mintNft(msg.sender, _tokenUri);
 
         // emit ItemFractionSold();
@@ -150,10 +152,10 @@ contract EventCreation is AccessControl {
         // emit ItemCanceled()
     }
 
-    function withdrawProceeds(address nftAddress) external {
-        uint256 proceeds = s_proceeds[msg.sender][nftAddress];
+    function withdrawProceeds() external {
+        uint256 proceeds = s_proceeds[msg.sender].totalEarned;
         if (proceeds <= 0) revert EventCreation__NoProceeds();
-        s_proceeds[msg.sender][nftAddress] = 0;
+        s_proceeds[msg.sender].totalEarned = 0;
         (bool success, ) = payable(msg.sender).call{value: proceeds}("");
         if (!success) revert EventCreation__TransferFailed();
     }
@@ -164,6 +166,25 @@ contract EventCreation is AccessControl {
 
     function getAllSaleEvents() public view returns (Event[] memory) {
         return allEvents;
+    }
+
+    function getEventById(uint256 eventId) public view returns (Event memory) {
+        return eachEvent[eventId];
+    }
+
+    function getSellerProceedsPerAsset(
+        address nftAddress
+    ) external view returns (uint256) {
+        return s_proceeds[msg.sender].earnedPerAsset[nftAddress];
+    }
+
+    function getSellerTotalProceeds() external view returns (uint256) {
+        return s_proceeds[msg.sender].totalEarned;
+    }
+
+    function getEventStatus(uint256 eventId) public view returns (Status) {
+        Event memory saleEvent = eachEvent[eventId];
+        return saleEvent.status;
     }
 }
 
