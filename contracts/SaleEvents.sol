@@ -5,18 +5,18 @@ pragma solidity ^0.8.9;
 import "@openzeppelin/contracts/access/AccessControl.sol";
 import "./IFractionalNft.sol";
 
-error EventCreation__NotTime();
-error EventCreation__NotApproved();
-error EventCreation__NotAdmin();
-error EventCreation__MustBeGreaterThanZero();
-error EventCreation__NotListed();
-error EventCreation__NotSeller();
-error EventCreation__AssetFractionNotAvailable();
-error EventCreation__SaleInProgress();
-error EventCreation__NoProceeds();
-error EventCreation__TransferFailed();
+error SaleEvents__NotTime();
+error SaleEvents__NotApproved();
+error SaleEvents__NotAdmin();
+error SaleEvents__MustBeGreaterThanZero();
+error SaleEvents__NotListed();
+error SaleEvents__NotSeller();
+error SaleEvents__AssetFractionNotAvailable();
+error SaleEvents__SaleInProgress();
+error SaleEvents__NoProceeds();
+error SaleEvents__TransferFailed();
 
-contract EventCreation is AccessControl {
+contract SaleEvents is AccessControl {
     uint256 private totalNumberEvents;
     address public immutable i_owner;
     bytes32 public constant APPROVAL_ROLE = keccak256("APPROVAL_ROLE");
@@ -52,19 +52,19 @@ contract EventCreation is AccessControl {
     Event[] private allEvents;
 
     modifier onlyAdmin() {
-        if (i_owner != msg.sender) revert EventCreation__NotAdmin();
+        if (i_owner != msg.sender) revert SaleEvents__NotAdmin();
         _;
     }
 
     modifier isSeller(uint256 eventId) {
         Event memory listing = eachEvent[eventId];
-        if (listing.seller != msg.sender) revert EventCreation__NotSeller();
+        if (listing.seller != msg.sender) revert SaleEvents__NotSeller();
         _;
     }
 
     modifier isListed(uint256 eventId) {
         Event memory listing = eachEvent[eventId];
-        if (listing.assetPrice <= 0) revert EventCreation__NotListed();
+        if (listing.assetPrice <= 0) revert SaleEvents__NotListed();
         _;
     }
 
@@ -91,7 +91,7 @@ contract EventCreation is AccessControl {
             msg.sender
         );
 
-        // if (block.timestamp < _startAt) revert EventCreation__NotTime();
+        // if (block.timestamp < _startAt) revert SaleEvents__NotTime();
         // userToEventId[msg.sender][totalNumberEvents] = User(msg.sender, 0);
         eachEvent[totalNumberEvents] = saleEvent;
         allEvents.push(saleEvent);
@@ -124,10 +124,10 @@ contract EventCreation is AccessControl {
         if (
             saleEvent.status == Status.Pending ||
             saleEvent.status == Status.Not_Approved
-        ) revert EventCreation__NotApproved();
+        ) revert SaleEvents__NotApproved();
         if (saleEvent.assetFractionAvailable < price)
-            revert EventCreation__AssetFractionNotAvailable();
-        if (msg.value < 0) revert EventCreation__MustBeGreaterThanZero();
+            revert SaleEvents__AssetFractionNotAvailable();
+        if (msg.value < 0) revert SaleEvents__MustBeGreaterThanZero();
 
         saleEvent.assetFractionAvailable -= price;
         s_proceeds[saleEvent.seller].earnedPerAsset[nftAddress] += price;
@@ -144,7 +144,7 @@ contract EventCreation is AccessControl {
     ) external isListed(eventId) isSeller(eventId) {
         Event memory saleEvent = eachEvent[eventId];
         if (block.timestamp >= saleEvent.startAt)
-            revert EventCreation__SaleInProgress();
+            revert SaleEvents__SaleInProgress();
         delete eachEvent[eventId];
         delete allEvents[eventId];
 
@@ -153,10 +153,10 @@ contract EventCreation is AccessControl {
 
     function withdrawProceeds() external {
         uint256 proceeds = s_proceeds[msg.sender].totalEarned;
-        if (proceeds <= 0) revert EventCreation__NoProceeds();
+        if (proceeds <= 0) revert SaleEvents__NoProceeds();
         s_proceeds[msg.sender].totalEarned = 0;
         (bool success, ) = payable(msg.sender).call{value: proceeds}("");
-        if (!success) revert EventCreation__TransferFailed();
+        if (!success) revert SaleEvents__TransferFailed();
     }
 
     //////////////////////
