@@ -115,7 +115,12 @@ contract EventCreation is AccessControl {
     }
 
     function buyAssetFraction(
+<<<<<<< HEAD
+        uint256 eventId, 
+        address nftAddress,
+=======
         uint256 eventId,
+>>>>>>> 4fad9506e929b1d2292e8bac7d8e05e3a2be6880
         uint256 price,
         string memory _tokenUri
     ) external payable {
