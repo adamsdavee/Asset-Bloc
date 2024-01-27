@@ -78,8 +78,7 @@ contract EventCreation is AccessControl {
         uint256 _endAt,
         string calldata _assetType,
         uint256 _assetPrice, // Doclink
-        address _nftAddress,
-        address seller
+        address _nftAddress
     ) external {
         Event memory saleEvent = Event(
             _assetType,
@@ -117,7 +116,6 @@ contract EventCreation is AccessControl {
 
     function buyAssetFraction(
         uint256 eventId,
-        address nftAddress,
         uint256 price,
         string memory _tokenUri
     ) external payable {
@@ -129,6 +127,8 @@ contract EventCreation is AccessControl {
         if (saleEvent.assetFractionAvailable < price)
             revert EventCreation__AssetFractionNotAvailable();
         if (msg.value < 0) revert EventCreation__MustBeGreaterThanZero();
+
+        address nftAddress = saleEvent.nftAddress;
 
         saleEvent.assetFractionAvailable -= price;
         s_proceeds[saleEvent.seller].earnedPerAsset[nftAddress] += price;
