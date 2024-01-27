@@ -26,10 +26,10 @@ module.exports = async function buyFractionOfAsset() {
 
   console.log(tokenUri);
 
-  const events = await deployments.get("EventCreation", deployer);
+  const events = await deployments.get("SaleEvents", deployer);
   console.log(events.address);
-  const EventContract = await ethers.getContractAt(
-    "EventCreation",
+  const SaleEvents = await ethers.getContractAt(
+    "SaleEvents",
     events.address
   );
 
@@ -39,12 +39,12 @@ module.exports = async function buyFractionOfAsset() {
     deployer
   );
 
-  await EventContract.createSaleEvent(1, 1, "Land", 100);
-  const allEvents = await EventContract.getSaleEvents();
+  await SaleEvents.createSaleEvent(1, 1, "Land", 100);
+  const allEvents = await SaleEvents.getSaleEvents();
 
   console.log(allEvents);
 
-  const tx = await EventContract.buyAssetFraction(
+  const tx = await SaleEvents.buyAssetFraction(
     1,
     nftContract.target,
     10,
