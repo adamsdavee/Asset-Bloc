@@ -19,16 +19,20 @@ async function storeImages(imagesFilePath) {
     const readableStreamForFile = fs.createReadStream(
       `${fullImagesPath}/${files[fileIndex]}`
     );
+    // console.log(readableStreamForFile);
+
     const options = {
       pinataMetadata: {
         name: files[fileIndex],
       },
     };
+
     try {
       const response = await pinata.pinFileToIPFS(
         readableStreamForFile,
         options
       );
+      console.log("Hii");
       responses.push(response);
     } catch (error) {
       console.log(error);

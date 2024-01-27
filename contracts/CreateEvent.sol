@@ -3,10 +3,12 @@
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/access/AccessControl.sol";
+import "./IERC72.sol";
 
 error EventCreation__NotTime();
 error EventCreation__NotApproved();
 error EventCreation__NotAdmin();
+error EventCreation__MustBeGreaterThanZero();
 
 contract EventCreation is AccessControl {
     uint256 private totalNumberEvents;
@@ -30,11 +32,12 @@ contract EventCreation is AccessControl {
         uint256 endAt;
         uint256 assetPrice;
         Status status;
-        // uint256 assetFractionAvailable;
+        uint256 assetFractionAvailable;
     }
 
     mapping(address => mapping(uint256 => User)) private userToEventId;
     mapping(uint256 => Event) private eachEvent;
+    // mapping(address => mapping(address =))
 
     Event[] private allEvents;
 
@@ -48,7 +51,7 @@ contract EventCreation is AccessControl {
         _grantRole(DEFAULT_ADMIN_ROLE, i_owner);
     }
 
-    function CreateSaleEvent(
+    function createSaleEvent(
         uint256 _startAt,
         uint256 _endAt,
         string calldata _assetType,
@@ -59,12 +62,10 @@ contract EventCreation is AccessControl {
             _startAt,
             _endAt,
             _assetPrice,
-            Status.Pending
+            Status.Pending,
+            _assetPrice
         );
-        if (
-            saleEvent.status == Status.Pending ||
-            saleEvent.status == Status.Not_Approved
-        ) revert EventCreation__NotApproved(); // Remove this
+
         if (block.timestamp < _startAt) revert EventCreation__NotTime();
         userToEventId[msg.sender][totalNumberEvents] = User(msg.sender, 0);
         eachEvent[totalNumberEvents] = saleEvent;
@@ -72,8 +73,6 @@ contract EventCreation is AccessControl {
 
         totalNumberEvents += 1;
     }
-
-    function editEvent() external {}
 
     function validateEventDoc(
         string calldata _docLink,
@@ -90,15 +89,37 @@ contract EventCreation is AccessControl {
         _grantRole(APPROVAL_ROLE, account);
     }
 
-    // function BuyAssetFraction(uint256 eventId) external payable {
-    //     if(msg.value)
-    // }
+    function buyAssetFraction(
+        uint256 eventId,
+        address nftAddress,
+        uint256 price,
+        string memory _tokenUri
+    ) external payable {
+        Event storage saleEvent = eachEvent[eventId];
+        if (
+            saleEvent.status == Status.Pending ||
+            saleEvent.status == Status.Not_Approved
+        ) revert EventCreation__NotApproved();
+        if (saleEvent.assetFractionAvailable < price)
+            revert EventCreation__AssetFractionNotAvailable();
+        if (msg.value < 0) revert EventCreation__MustBeGreaterThanZero();
+
+        saleEvent.assetFractionAvailable -= price;
+
+        IERC72 nft = IERC72(nftAddress);
+        nft.mintNft(msg.sender, _tokenUri);
+    }
+
+    function cancelEvent() external {}
+
+    // getter functions
+    function getAllSaleEvents() public view returns (Event[] memory) {
+        return allEvents;
+    }
 }
 
 // 1. Create event
-// 2. Edit event
 // 2. Validate Doc by Admins
 // 2. Buy asset
 // 2. Cancel event
-// 3. Make Admin
 // 4. DEFI
