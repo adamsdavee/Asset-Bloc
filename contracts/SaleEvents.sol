@@ -116,7 +116,6 @@ contract SaleEvents is AccessControl {
 
     function buyAssetFraction(
         uint256 eventId,
-        address nftAddress,
         uint256 price,
         string memory _tokenUri
     ) external payable {
