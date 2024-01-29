@@ -34,6 +34,7 @@ contract SaleEvents is AccessControl {
     }
 
     struct Event {
+        uint256 id;
         string assetType;
         uint256 startAt;
         uint256 endAt;
@@ -78,9 +79,10 @@ contract SaleEvents is AccessControl {
         uint256 _endAt,
         string calldata _assetType,
         uint256 _assetPrice, // Doclink
-        address _nftAddress
     ) external {
+        totalNumberEvents += 1;
         Event memory saleEvent = Event(
+            totalNumberEvents,
             _assetType,
             _startAt,
             _endAt,
@@ -95,8 +97,6 @@ contract SaleEvents is AccessControl {
         // userToEventId[msg.sender][totalNumberEvents] = User(msg.sender, 0);
         eachEvent[totalNumberEvents] = saleEvent;
         allEvents.push(saleEvent);
-
-        totalNumberEvents += 1;
     }
 
     function validateEventDoc(
@@ -115,7 +115,7 @@ contract SaleEvents is AccessControl {
     }
 
     function buyAssetFraction(
-        uint256 eventId, 
+        uint256 eventId,
         address nftAddress,
         uint256 price,
         string memory _tokenUri
