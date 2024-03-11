@@ -26,10 +26,10 @@ contract FractionalNft is ERC721URIStorage, AccessControl {
 
     function mintNft(
         address to,
-        string memory tokenURI
+        string memory TokenURI
     ) external onlyRole(MINTER_ROLE) {
         _safeMint(to, s_tokenCounter);
-        _setTokenURI(s_tokenCounter, tokenURI);
+        _setTokenURI(s_tokenCounter, TokenURI);
     }
 
     function tokenURI(
